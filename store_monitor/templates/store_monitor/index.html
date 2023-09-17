@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Monitor</title>
+</head>
+<body>
+
+<button id="triggerButton">Trigger Report Generation</button>
+<button id="fetchReportButton" disabled>Fetch Report</button>
+<p id="reportStatus">Report status: Not triggered yet</p>
+
+<script>
+const triggerButton = document.getElementById('triggerButton');
+const fetchReportButton = document.getElementById('fetchReportButton');
+const reportStatus = document.getElementById('reportStatus');
+
+let reportId = null;
+
+triggerButton.onclick = async function() {
+    const response = await fetch('/trigger_report/', { method: 'POST' });
+    const data = await response.json();
+    reportId = data.report_id;
+    reportStatus.textContent = 'Report is being generated. Please wait...';
+    fetchReportButton.disabled = false;
+};
+
+fetchReportButton.onclick = async function() {
+    if (reportId) {
+        window.location.href = `/get_report/${reportId}/`;
+    }
+};
+</script>
+
+</body>
+</html>
